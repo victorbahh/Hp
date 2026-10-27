@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Documentos para HP Prime</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./prime-codec.js" defer></script>
+  <script src="./prime-webhid.js" defer></script>
+  <script src="./png.js" defer></script>
+  <script src="./prime-images.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="app-header">
+      <div class="app-identity">
+        <span class="app-symbol" aria-hidden="true">
+          <svg viewBox="0 0 32 40" fill="none"><rect x="3" y="1" width="26" height="38" rx="5" stroke="currentColor" stroke-width="2"/><rect x="7" y="6" width="18" height="12" rx="2" fill="currentColor" opacity=".18"/><path d="M8 23h2m5 0h2m5 0h2M8 28h2m5 0h2m5 0h2M8 33h2m5 0h2m5 0h2" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        </span>
+        <div><h1><span>Documentos</span><span class="header-divider" aria-hidden="true"></span><span class="header-device">HP Prime</span></h1><p>PDFs e imagens · envio diretamente do navegador via USB</p></div>
+      </div>
+      <a class="support-link" href="#project-support">Apoiar o projeto <span aria-hidden="true">♡</span></a>
+    </header>
+    <section id="connection-card" class="connection-card" aria-labelledby="connection-title">
+      <div class="connection-description">
+        <span class="connection-device" aria-hidden="true">
+          <svg viewBox="0 0 32 40" fill="none"><rect x="3" y="1" width="26" height="38" rx="5" stroke="currentColor" stroke-width="2"/><rect x="7" y="6" width="18" height="12" rx="2" fill="currentColor" opacity=".18"/><path d="M8 23h2m5 0h2m5 0h2M8 28h2m5 0h2m5 0h2M8 33h2m5 0h2m5 0h2" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <span id="connection-indicator" class="connection-indicator">USB</span>
+        </span>
+        <div>
+          <h2 id="connection-title">Conexão com a calculadora</h2>
+          <p class="muted">Conecte a calculadora pelo cabo USB e envie por aqui, sem abrir outro programa.
+            Se preferir, baixe os apps sem conectar.</p>
+        </div>
+      </div>
+      <div class="connection-area">
+        <button id="connect">Conectar HP Prime</button>
+        <span id="connection" role="status">Nenhuma calculadora conectada.</span>
+        <button id="disconnect" class="quiet" hidden>Desconectar</button>
+      </div>
+    </section>
+    <p id="support" class="notice" role="status"></p>
+    <section class="workspace" aria-label="Preparar documentos">
+      <div id="dropzone" class="dropzone" role="group" aria-label="Área para soltar arquivos">
+        <div class="upload-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="dropzone-copy">
+          <h2 id="drop-title">Arraste PDFs ou imagens</h2>
+          <p id="drop-description">PDF, PNG, JPG, WebP, BMP e GIF · até 64 MiB de entrada</p>
+        </div>
+        <button id="choose">Escolher arquivos</button>
+        <input id="files" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/gif,application/pdf,.pdf" multiple hidden>
+        <small>A seleção é temporária: recarregar ou fechar a aba a descarta.</small>
+      </div>
+      <section id="next-step" class="next-step" aria-label="Organizar documentos" tabindex="-1">
+      <div class="section-heading mode-heading"><h2><span class="step-number">1</span> Documentos</h2><span class="muted">Todas as páginas incluídas por padrão</span></div>
+      <div class="mode-picker" role="group" aria-label="Como organizar os arquivos">
+        <label class="mode-option">
+          <input type="radio" name="mode" id="mode-separate" value="separate" checked>
+          <span><strong>Um app por arquivo</strong><small>Cada PDF ou imagem tem seu próprio app</small></span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="mode" id="mode-combined" value="combined">
+          <span><strong>Juntar em um app</strong><small>Todos os arquivos, na ordem que você escolher</small></span>
+        </label>
+      </div>
+      <div id="editor" hidden>
+        <label id="combined-name" hidden>Nome do app unificado
+          <input id="name" type="text" value="MeusDocumentos" maxlength="32" autocomplete="off">
+        </label>
+        <div class="selection-line">
+          <p id="selection-summary" role="status"></p>
+          <button id="clear" class="quiet danger">Limpar seleção</button>
+        </div>
+        <ul id="documents" class="documents" aria-label="Documentos adicionados"></ul>
+        <div id="editor-tools" hidden>
+        <div id="page-tray" class="document-editor" hidden>
+          <div class="document-options">
+            <label>Páginas incluídas
+              <div class="range-line">
+                <input id="document-range" type="text" placeholder="Ex.: 1-5, 8, 12-20">
+                <button id="select-range" class="secondary">Selecionar</button>
+              </div>
+            </label>
+            <label>Cores
+              <select id="colors">
+                <option value="color" selected>Colorido adaptativo</option>
+                <option value="gray">Tons de cinza</option>
+              </select>
+            </label>
+            <label>Resolução máxima
+              <select id="resolution">
+                <option value="640">640 px · mais compacto</option>
+                <option value="960" selected>960 px · equilibrado</option>
+                <option value="1280">1280 px · mais detalhes</option>
+                <option value="2048">2048 px · maior uso de memória</option>
+                <option value="custom">Personalizada…</option>
+              </select>
+            </label>
+            <label id="custom-resolution-label" hidden>Maior lado em pixels (64–2048)
+              <input id="custom-resolution" type="number" min="64" max="2048" step="1" value="960">
+            </label>
+            <label>Paleta
+              <select id="palette"><option value="default">Padrão · 256 cores / 32 tons</option><option value="custom">Quantidade personalizada…</option></select>
+            </label>
+            <label id="custom-colors-label" hidden>Máximo de cores ou tons (2–256)
+              <input id="custom-colors" type="number" min="2" max="256" step="1" value="256">
+            </label>
+          </div>
+          <p class="muted">Qualidade apenas deste documento. Imagens pequenas não são ampliadas. Intervalo vazio remove todas as páginas.</p>
+          <div class="organizer-toolbar">
+            <h3 id="organizer-title">Páginas do documento</h3>
+            <span id="page-count" class="pill">0 páginas</span>
+            <button id="organizer-scope" class="quiet" hidden>Ordenar entre documentos</button>
+          </div>
+          <p id="organizer-status" class="muted" role="status">Arraste para ordenar, gire ou exclua.</p>
+          <ol id="previews" class="pages" aria-label="Páginas na ordem de leitura"></ol>
+          <p id="reorder-status" class="sr-only" role="status"></p>
+        <div class="configuration-footer">
+          <button id="remove-document" class="quiet danger">Remover documento</button>
+          <p id="settings-status" class="muted" role="status">Você também pode enviar ou baixar diretamente.</p>
+          <button id="prepare">Aplicar</button>
+        </div>
+        </div>
+        </div>
+      </div>
+      </section>
+    </section>
+    <section id="delivery" class="delivery" aria-labelledby="delivery-title">
+      <h2 id="delivery-title"><span class="step-number">2</span> Enviar ou baixar</h2>
+      <p id="package" role="status">Os arquivos serão preparados ao enviar ou baixar.</p>
+      <ul id="apps" class="app-list" aria-label="Fila de apps"></ul>
+      <p id="result-summary" class="result-summary" role="status" hidden></p>
+      <div class="send-line">
+        <button id="send" disabled>Enviar para a HP Prime</button>
+        <button id="download" class="secondary" disabled>Baixar .hpappdir</button>
+        <button id="cancel" class="secondary" hidden>Cancelar preparação</button>
+      </div>
+      <progress id="progress" max="100" value="0" aria-label="Progresso" hidden></progress>
+      <p id="operation" role="status">Arraste arquivos e escolha enviar ou baixar. O download não exige calculadora conectada.</p>
+      <p class="muted">Download em ZIP: extraia para obter as pastas .hpappdir.
+        A conversão usa as configurações escolhidas acima.</p>
+    </section>
+    <section id="project-support" class="project-support" aria-labelledby="project-support-title">
+      <div class="support-copy">
+        <span class="support-eyebrow"><span aria-hidden="true">♡</span> Apoie um projeto gratuito</span>
+        <h2 id="project-support-title">Seu apoio faz a diferença.<br>Ajude este projeto a continuar.</h2>
+        <p>Se este app poupou seu tempo, considere fazer uma doação via Pix.
+          Você escolhe o valor e ajuda a dar continuidade às melhorias.</p>
+        <div class="support-reassurance"><span aria-hidden="true">✓</span> Todas as funções são gratuitas. Doar é totalmente opcional.</div>
+        <small>Obrigado por usar o app. Seu apoio, de qualquer valor, é bem-vindo.</small>
+      </div>
+      <figure class="support-qr">
+        <img src="./pix.svg" width="280" height="280" alt="QR Code Pix para apoiar voluntariamente o projeto.">
+        <figcaption><strong>Apoie com um Pix <span aria-hidden="true">♡</span></strong><span>Escaneie com o app do seu banco.<br>Confira o destinatário antes de confirmar.</span></figcaption>
+      </figure>
+    </section>
+    <details class="diagnostics">
+      <summary>Conexão e diagnóstico</summary>
+      <p id="firmware">Use Chrome ou Edge no computador. Feche outros clientes e abas USB.</p>
+      <p>Em caso de erro de comunicação, desconecte e reconecte o cabo e a sessão, sem reset.
+        Faça backup dos dados da Prime antes de substituir apps. “Enviado” indica transmissão concluída,
+        sem releitura automática do conteúdo. Abra o app na Prime para conferir o resultado.</p>
+      <pre id="log" role="log" aria-live="polite"></pre>
+    </details>
+    <dialog id="preview-dialog" aria-labelledby="preview-title">
+      <div class="section-heading"><h2 id="preview-title">Prévia da página</h2><button id="close-preview" class="secondary">Fechar</button></div>
+      <p id="preview-description" class="muted">Confira o PNG preparado antes de enviar.</p>
+      <img id="preview-image" alt="">
+    </dialog>
+  </main>
+</body>
+</html>
