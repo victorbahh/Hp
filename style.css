@@ -1,6 +1,8 @@
 :root { color-scheme: light; font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif; color: #263445; background: #f0f3f7; line-height: 1.5; --accent: #2459a6; --border: #dce3ec; --muted: #64748b; }
 * { box-sizing: border-box; }
 body { margin: 0; }
+.skip-link { position: absolute; z-index: 10; top: 8px; left: 8px; transform: translateY(-160%); padding: 9px 13px; border-radius: 5px; background: #fff; color: var(--accent); box-shadow: 0 2px 10px #26344530; font-size: 13px; font-weight: 600; }
+.skip-link:focus { transform: translateY(0); }
 main { max-width: 1440px; padding: 0 40px 32px; margin: auto; }
 button, input, select { font: inherit; }
 button { border: 1px solid transparent; background: var(--accent); color: white; border-radius: 6px; padding: 10px 18px; cursor: pointer; font-size: 13px; font-weight: 600; transition: background .12s, border-color .12s; }
